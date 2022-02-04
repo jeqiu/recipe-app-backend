@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 // returns one random recipe from Spoonacular
 async function getRandomRecipe() {
   const recipe = await axios.get(
-    `https://api.spoonacular.com/recipes/random?number=1&limitLicense=true&apiKey=${process.env.SPOON_APIKEY}`
+    `https://api.spoonacular.com/recipes/random?number=1&limitLicense=true&apiKey=${process.env.SPOON_API_KEY2}`
     );
   return recipe.data;
 };
@@ -29,6 +29,8 @@ app.get('/api/random_recipe', async (req, res) => {
   const recipeObj = await getRandomRecipe();
   res.json(recipeObj);
 });
+
+
 
 // app.get('/api/recipes/:id', (request, response) => {
 //   const id = Number(request.params.id);
