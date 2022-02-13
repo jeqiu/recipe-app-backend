@@ -2,12 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-require('express-async-errors');
 
 const app = express();
+require('express-async-errors');
+
+const usersRouter = require('./routes/users');
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // replace bodyparser; parse incoming requests with JSON payloads
 app.use(express.static('build'));
 
 app.use((req, res, next) => {
@@ -16,6 +18,8 @@ app.use((req, res, next) => {
   console.log('Body: ', req.body);
   next();
 });
+
+app.use('/api/users', usersRouter);
 
 // returns a random recipe from Spoonacular
 async function getRandomRecipe() {
