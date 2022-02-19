@@ -39,7 +39,7 @@ recipesRouter.get('/search_recipe/:strParam', async (req, res) => {
   res.json(recipeObj);
 });
 
-// ~~~~~~~~~~~~~~~~~ TO-TEST ~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~ Endpoints for database ~~~~~~~~~~~~~~~~~~~~~~~~
 
 // GET all stored recipes; returns an array of recipe objects
 recipesRouter.get('/', async (req, res) => {
@@ -49,10 +49,25 @@ recipesRouter.get('/', async (req, res) => {
   res.status(200).json(results.rows);
 });
 
+// return a recipe by id
+recipesRouter.get('/:recipeId', async (req, res) => {
+  const { recipeId } = req.params;
+  console.log(`get recipe with id: ${recipeId}`);
+
+  const results = await pool.query('SELECT * FROM recipes WHERE recipe_id = $1', [recipeId]);
+  console.log(results.rows);
+
+  if (results.rows[0]) {
+    res.status(200).json(results.rows[0]);
+  } else {
+    res.status(404).json({ message: 'no such recipe_id' });
+  }
+});
+
 // adds a new recipe to the database
 recipesRouter.post('/', async (req, res) => {
   const {
-    recipeId,
+    recipeId, // recipeId NOT recipe_id
     title,
     ingredients,
     url,
