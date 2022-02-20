@@ -12,7 +12,7 @@ const recipesRouter = require('./routes/recipes');
 
 app.use(cors());
 app.use(express.json()); // replace bodyparser; parse incoming requests with JSON payloads
-app.use(express.static('build'));
+app.use(express.static('build')); // root directory from which to serve static assets
 
 app.use((req, res, next) => {
   console.log('Method: ', req.method);
@@ -23,6 +23,7 @@ app.use((req, res, next) => {
 
 // GET requests which do not match baseUrl/api/ will get index.html
 app.use(history({
+  index: '/build/index.html',
   rewrites: [
     {
       from: /^\/api\/.*$/,
@@ -43,6 +44,8 @@ app.use('/api/recipes', recipesRouter);
 //     response.status(404).end();
 //   }
 // });
+
+// app.get('/*', (req, res) => res.sendFile(path.join(__dirname, 'path/to/your/index.html')));
 
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint' });
