@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const history = require('connect-history-api-fallback');
 
 const app = express();
 require('express-async-errors');
@@ -19,6 +20,16 @@ app.use((req, res, next) => {
   console.log('Body: ', req.body);
   next();
 });
+
+// GET requests which do not match baseUrl/api/ will get index.html
+app.use(history({
+  rewrites: [
+    {
+      from: /^\/api\/.*$/,
+      to: (context) => context.parsedUrl.path,
+    },
+  ],
+}));
 
 app.use('/api/users', usersRouter);
 app.use('/api/recipes', recipesRouter);
