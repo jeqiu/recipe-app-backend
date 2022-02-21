@@ -8,6 +8,7 @@ require('express-async-errors');
 
 const usersRouter = require('./routes/users');
 const recipesRouter = require('./routes/recipes');
+const loginRouter = require('./routes/login');
 
 app.use(cors());
 app.use(express.json()); // replace bodyparser; parse incoming requests with JSON payloads
@@ -34,6 +35,7 @@ app.use(express.static('build')); // root directory from which to serve static a
 
 app.use('/api/users', usersRouter);
 app.use('/api/recipes', recipesRouter);
+app.use('/api/login', loginRouter);
 
 // app.get('/api/recipes/:id', (request, response) => {
 //   const id = Number(request.params.id);
