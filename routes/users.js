@@ -2,8 +2,7 @@ const bcrypt = require('bcrypt');
 const usersRouter = require('express').Router();
 const { pool } = require('../config');
 
-// PUT  /users/:id | updateUser()
-// DELETE  /users/:id | deleteUser()
+// updateUser(): PUT  /users/:username
 
 // adds a new user to the database
 usersRouter.post('/', async (req, res) => {
