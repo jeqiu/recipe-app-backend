@@ -71,9 +71,10 @@ recipesRouter.post('/', async (req, res) => {
     title,
     ingredients,
     url,
+    imageUrl,
   } = req.body;
 
-  const results = await pool.query('INSERT INTO recipes (recipe_id, title, ingredients, url) VALUES ($1, $2, $3, $4)', [recipeId, title, ingredients, url]);
+  const results = await pool.query('INSERT INTO recipes (recipe_id, title, ingredients, url, image_url) VALUES ($1, $2, $3, $4, $5)', [recipeId, title, ingredients, url, imageUrl]);
   console.log(results);
 
   res.status(201).json({ status: 'success', message: `Recipe ${recipeId} added.` });

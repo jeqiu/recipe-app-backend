@@ -6,9 +6,9 @@ const history = require('connect-history-api-fallback');
 const app = express();
 require('express-async-errors');
 
-const usersRouter = require('./routes/users');
-const recipesRouter = require('./routes/recipes');
-const loginRouter = require('./routes/login');
+const usersRouter = require('./controllers/users');
+const recipesRouter = require('./controllers/recipes');
+const loginRouter = require('./controllers/login');
 
 app.use(cors());
 app.use(express.json()); // replace bodyparser; parse incoming requests with JSON payloads
