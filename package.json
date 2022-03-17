@@ -7,14 +7,14 @@
     "node": "16.x"
   },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
     "build:ui": "rm -rf build && cd ../recipe_app_frontend/ && npm run build && cp -r build ../recipe_app_backend",
     "deploy": "git push heroku main",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
     "logs:prod": "heroku logs --tail",
-    "test": "jest --verbose"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "author": "jq",
   "license": "ISC",
@@ -23,6 +23,7 @@
     "bcrypt": "^5.0.1",
     "connect-history-api-fallback": "^1.6.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
     "express-async-errors": "^3.1.1",
@@ -34,7 +35,8 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
     "jest": "^27.5.1",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   },
   "jest": {
     "testEnvironment": "node"
