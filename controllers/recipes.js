@@ -44,6 +44,7 @@ recipesRouter.get('/search_recipe/:strParam', async (req, res) => {
 // GET all stored recipes; returns an array of recipe objects
 recipesRouter.get('/', async (req, res) => {
   const results = await pool.query('SELECT * FROM recipes');
+  console.log('All recipes: ');
   console.log(results.rows);
 
   res.status(200).json(results.rows);
