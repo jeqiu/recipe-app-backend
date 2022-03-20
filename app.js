@@ -9,16 +9,12 @@ require('express-async-errors');
 const usersRouter = require('./controllers/users');
 const recipesRouter = require('./controllers/recipes');
 const loginRouter = require('./controllers/login');
+const middleware = require('./utils/middleware');
 
 app.use(cors());
 app.use(express.json()); // replace bodyparser; parse incoming requests with JSON payloads
 
-app.use((req, res, next) => {
-  console.log('Method: ', req.method);
-  console.log('Path: ', req.path);
-  console.log('Body: ', req.body);
-  next();
-});
+app.use(middleware.requestLogger);
 
 // Incoming GET requests which don't match baseUrl/api/ will get index.html
 app.use(history({
@@ -36,26 +32,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/recipes', recipesRouter);
 app.use('/api/login', loginRouter);
 
-// app.get('/api/recipes/:id', (request, response) => {
-//   const id = Number(request.params.id);
-//   const recipe = recipes.find(recipe => recipe.id === id);
-//   if (recipe) {
-//     response.json(recipe);
-//   } else {
-//     response.status(404).end();
-//   }
-// });
-
-const unknownEndpoint = (req, res) => {
-  res.status(404).send({ error: 'unknown endpoint' });
-};
-app.use(unknownEndpoint);
-
-// general error handler
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  console.log(`error handler: '${err.message}'`);
-  res.json({ error: err.message });
-});
+app.use(middleware.unknownEndpoint);
+app.use(middleware.errorHandler);
 
 module.exports = app;

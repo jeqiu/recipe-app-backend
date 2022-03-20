@@ -1,6 +1,7 @@
 const recipesRouter = require('express').Router();
 const axios = require('axios');
 const { pool } = require('../config');
+const logger = require('../utils/logger');
 
 // returns a random recipe from Spoonacular's random recipe api endpoint
 async function getRandomRecipe() {
@@ -47,18 +48,18 @@ recipesRouter.get('/', async (req, res) => {
   const results = await client.query('SELECT * FROM recipes');
   client.release();
 
-  console.log(`GET all ${results.rows.length} recipes: `);
-  console.log(results.rows);
+  logger.info(`GET all ${results.rows.length} recipes: `);
+  logger.info(results.rows);
   res.status(200).json(results.rows);
 });
 
 // return a recipe by id
 recipesRouter.get('/:recipeId', async (req, res) => {
   const { recipeId } = req.params;
-  console.log(`get recipe with id: ${recipeId}`);
+  logger.info(`get recipe with id: ${recipeId}`);
 
   const results = await pool.query('SELECT * FROM recipes WHERE recipe_id = $1', [recipeId]);
-  console.log(results.rows);
+  logger.info(results.rows);
 
   if (results.rows[0]) {
     res.status(200).json(results.rows[0]);
@@ -78,7 +79,7 @@ recipesRouter.post('/', async (req, res) => {
   } = req.body;
 
   const results = await pool.query('INSERT INTO recipes (recipe_id, title, ingredients, url, image_url) VALUES ($1, $2, $3, $4, $5)', [recipeId, title, ingredients, url, imageUrl]);
-  console.log(results);
+  logger.info(results);
 
   res.status(201).json({ status: 'success', message: `Recipe ${recipeId} added.` });
 });
@@ -86,10 +87,10 @@ recipesRouter.post('/', async (req, res) => {
 // deletes a recipe based on recipe_id
 recipesRouter.delete('/:recipeId', async (req, res) => {
   const { recipeId } = req.params;
-  console.log(`deleting recipe: ${recipeId}`);
+  logger.info(`deleting recipe: ${recipeId}`);
 
   const results = await pool.query('DELETE FROM recipes WHERE recipe_id = $1', [recipeId]);
-  console.log(results);
+  logger.info(results);
 
   res.status(200).json({ status: 'success', message: `Deleted recipe: ${recipeId}.` });
 });
