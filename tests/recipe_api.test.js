@@ -1,6 +1,7 @@
 const supertest = require('supertest');
 const app = require('../app');
 const { pool } = require('../config');
+const logger = require('../utils/logger');
 
 const api = supertest(app);
 
@@ -19,5 +20,5 @@ test('recipe has id, title, ingredients, url, image_url', async () => {
 });
 
 afterAll(() => {
-  pool.end().then(() => console.log('pool has ended'));
+  pool.end().then(() => logger.info('pool has ended'));
 });
